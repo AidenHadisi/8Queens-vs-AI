@@ -26,6 +26,9 @@ const theme = createMuiTheme({
         a: {
           color: "#e84545",
         },
+        p: {
+          margin: "8px",
+        },
       },
     },
   },

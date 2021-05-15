@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 import { withStyles, Theme, WithStyles } from "@material-ui/core/styles";
-import { Button } from "@material-ui/core";
+import { Button, Grid } from "@material-ui/core";
 import { GeneticAlgorithm } from "./GeneticAlgorithm";
 import Board from "./components/Board";
 
@@ -24,6 +24,14 @@ const styles = (theme: Theme) => ({
     "& td": {
       padding: "5px",
     },
+  },
+
+  item: {
+    display: "flex",
+    flexDirection: "column" as "column",
+    alignItems: "center",
+    textAlign: "center" as "center",
+    justifyContent: "center",
   },
 });
 
@@ -77,75 +85,86 @@ class App extends React.Component<Props, IState> {
 
     return (
       <div className={classes.root}>
-        <h1 style={{ padding: "5px 2rem" }}>8-Queens vs A.I.</h1>
-        <h3>
-          View on{" "}
-          <a href="https://github.com/AidenHadisi/8Queens-vs-AI">GitHub</a>
-        </h3>
-        <p style={{ marginBottom: "1rem" }}>
-          This application solves the 8-Queens problem using a{" "}
-          <b>genetic algorithm</b>.
-          <br />
-          Given one queen in each column, the A.I. will move the queens to
-          different squares until no queens are attacking each other.
-          <br />
-          The initial population is set to 100. The algorithm will generate up
-          to 500 new solutions before giving up. The mutation porbability is set
-          to 5%.
-        </p>
-        {!this.state.running && (
-          <div>
-            <Button
-              variant="contained"
-              color="primary"
-              style={{ marginRight: "1rem" }}
-              onClick={this.start}
-            >
-              Start
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={this.randomize}
-            >
-              Randomize
-            </Button>
-          </div>
-        )}
+        <Grid container spacing={2} style={{ minHeight: "100vh" }}>
+          <Grid item xs={12} md={6} className={classes.item}>
+            <h1 style={{ padding: "5px 2rem" }}>8-Queens vs A.I.</h1>
+            <h3>
+              View on{" "}
+              <a href="https://github.com/AidenHadisi/8Queens-vs-AI">GitHub</a>
+            </h3>
+            <p>
+              This application solves the 8-Queens problem using a{" "}
+              <b>genetic algorithm</b>.
+            </p>
+            <p>
+              Given one queen in each column, the A.I. will move the queens to
+              different squares until no queens are attacking each other.
+            </p>
+            <p>
+              The initial population is set to 100. The algorithm will generate
+              up to 500 new solutions before giving up. The mutation porbability
+              is set to 5%.
+            </p>
+            {!this.state.running && (
+              <div>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  style={{ marginRight: "1rem" }}
+                  onClick={this.start}
+                >
+                  Start
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={this.randomize}
+                >
+                  Randomize
+                </Button>
+              </div>
+            )}
 
-        <table className={classes.infoTable}>
-          <tr>
-            <td>
-              <h3>
-                Distance: <span className={classes.info}>{this.state.h}</span>
-              </h3>
-            </td>
-            <td>
-              <h3>
-                New Solutions Generated:
-                <span className={classes.info}> {this.state.n}</span>
-              </h3>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <h3>
-                Mutations:
-                <span className={classes.info}> {this.state.mutations}</span>
-              </h3>
-            </td>
-            <td>
-              <h3>
-                State:{" "}
-                <span className={classes.info}>
-                  [{this.state.chromos.join(", ")}]
-                </span>
-              </h3>
-            </td>
-          </tr>
-        </table>
-
-        <Board chromosomes={this.state.chromos} />
+            <table className={classes.infoTable}>
+              <tr>
+                <td>
+                  <h3>
+                    Distance:{" "}
+                    <span className={classes.info}>{this.state.h}</span>
+                  </h3>
+                </td>
+                <td>
+                  <h3>
+                    New Solutions Generated:
+                    <span className={classes.info}> {this.state.n}</span>
+                  </h3>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <h3>
+                    Mutations:
+                    <span className={classes.info}>
+                      {" "}
+                      {this.state.mutations}
+                    </span>
+                  </h3>
+                </td>
+                <td>
+                  <h3>
+                    State:
+                    <span className={classes.info}>
+                      [{this.state.chromos.join(", ")}]
+                    </span>
+                  </h3>
+                </td>
+              </tr>
+            </table>
+          </Grid>
+          <Grid item xs={12} md={6} className={classes.item}>
+            <Board chromosomes={this.state.chromos} />
+          </Grid>
+        </Grid>
       </div>
     );
   }
