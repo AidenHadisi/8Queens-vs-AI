@@ -23,6 +23,11 @@ const theme = createMuiTheme({
           marginBottom: "1rem",
           display: "block",
         },
+        h2: {
+          borderBottom: "2px solid #e84545",
+          margin: "1rem",
+          display: "block",
+        },
         a: {
           color: "#e84545",
         },

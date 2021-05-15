@@ -74,9 +74,10 @@ class App extends React.Component<Props, IState> {
   };
 
   start = () => {
-    this.setState({ running: true, genCount: 0, mutations: 0 });
-    var ga = new GeneticAlgorithm(this.setData, this.onDone, this.onMutation);
-    ga.start();
+    this.setState({ running: true, genCount: 0, mutations: 0 }, () => {
+      var ga = new GeneticAlgorithm(this.setData, this.onDone, this.onMutation);
+      ga.start();
+    });
   };
 
   randomize = () => {
@@ -104,11 +105,37 @@ class App extends React.Component<Props, IState> {
               Given one queen in each column, the A.I. will move the queens to
               different squares until no queens are attacking each other.
             </p>
+            <h2>How It Works</h2>
             <p>
-              The initial population is set to 100. The algorithm will generate
-              up to 500 new solutions before giving up. The mutation porbability
-              is set to 5%.
+              The genetic algorithms are evolutionary biology-inspired
+              algorithms that are commonly used for Artificial Intelligence. In
+              fact, a basic knowledge of biology is enough to understand how
+              this algorithm works. There are 4,426,165,368 different ways to
+              arrange 8 queens on a chessboard. With the power of the genetic
+              algorithm, we can find a solution by generating only hundreds of
+              solutions.
             </p>
+            <p>
+              We begin with a population of 100 individuals where each
+              individual is a solution to the problem (i.e. a state:
+              [1,0,2,4,5,3,6,7]). We also define a fitness value for each
+              individual in the population. In this case, fitness value is the
+              number of queens that are attacking each other, so we are looking
+              to minimize our fitness value.
+            </p>{" "}
+            <p>
+              {" "}
+              If we find an ideal solution in our population, we return the
+              solution. If not, we create new children by combing our solutions
+              using the process of crossover and mutations. After generating a
+              new set of solutions, we eliminate the solutions that are less fit
+              for our environment (natural selection!). We continue this process
+              until we find a solution with a fitness value of 0, which means
+              this is the fittest individual.
+            </p>
+          </Grid>
+
+          <Grid item xs={12} md={6} className={classes.item}>
             {!this.state.running && (
               <div>
                 <Button
@@ -165,8 +192,6 @@ class App extends React.Component<Props, IState> {
                 </td>
               </tr>
             </table>
-          </Grid>
-          <Grid item xs={12} md={6} className={classes.item}>
             <Board chromosomes={this.state.chromosome} />
           </Grid>
         </Grid>
