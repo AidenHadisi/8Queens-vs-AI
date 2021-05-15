@@ -38,9 +38,9 @@ const styles = (theme: Theme) => ({
 interface Props extends WithStyles<typeof styles> {}
 
 interface IState {
-  h: number;
-  n: number;
-  chromos: number[];
+  fitness: number;
+  genCount: number;
+  chromosome: number[];
   running: boolean;
   mutations: number;
 }
@@ -49,16 +49,20 @@ class App extends React.Component<Props, IState> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      h: 0,
-      n: 0,
-      chromos: [6, 1, 3, 0, 7, 4, 2, 5],
+      fitness: 0,
+      genCount: 0,
+      chromosome: [6, 1, 3, 0, 7, 4, 2, 5],
       running: false,
       mutations: 0,
     };
   }
 
-  setData = (h: number, chromos: number[]) => {
-    this.setState({ chromos: chromos, h: h, n: this.state.n + 1 });
+  setData = (fitness: number, chromosome: number[]) => {
+    this.setState({
+      chromosome: chromosome,
+      fitness: fitness,
+      genCount: this.state.genCount + 1,
+    });
   };
 
   onMutation = () => {
@@ -70,15 +74,15 @@ class App extends React.Component<Props, IState> {
   };
 
   start = () => {
-    this.setState({ running: true, n: 0, h: 0, mutations: 0 });
+    this.setState({ running: true, genCount: 0, mutations: 0 });
     var ga = new GeneticAlgorithm(this.setData, this.onDone, this.onMutation);
     ga.start();
   };
 
   randomize = () => {
-    var arr = this.state.chromos;
+    var arr = this.state.chromosome;
     shuffleArray(arr);
-    this.setState({ chromos: arr });
+    this.setState({ chromosome: arr });
   };
   public render(): JSX.Element {
     const { classes } = this.props;
@@ -129,14 +133,14 @@ class App extends React.Component<Props, IState> {
               <tr>
                 <td>
                   <h3>
-                    Distance:{" "}
-                    <span className={classes.info}>{this.state.h}</span>
+                    Fitness:{" "}
+                    <span className={classes.info}>{this.state.fitness}</span>
                   </h3>
                 </td>
                 <td>
                   <h3>
                     New Solutions Generated:
-                    <span className={classes.info}> {this.state.n}</span>
+                    <span className={classes.info}> {this.state.genCount}</span>
                   </h3>
                 </td>
               </tr>
@@ -154,7 +158,8 @@ class App extends React.Component<Props, IState> {
                   <h3>
                     State:
                     <span className={classes.info}>
-                      [{this.state.chromos.join(", ")}]
+                      {" "}
+                      [{this.state.chromosome.join(", ")}]
                     </span>
                   </h3>
                 </td>
@@ -162,7 +167,7 @@ class App extends React.Component<Props, IState> {
             </table>
           </Grid>
           <Grid item xs={12} md={6} className={classes.item}>
-            <Board chromosomes={this.state.chromos} />
+            <Board chromosomes={this.state.chromosome} />
           </Grid>
         </Grid>
       </div>
