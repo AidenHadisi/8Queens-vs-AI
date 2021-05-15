@@ -61,7 +61,7 @@ class App extends React.Component<Props, IState> {
   };
 
   start = () => {
-    this.setState({ running: true, n: 0, mutations: 0 });
+    this.setState({ running: true, n: 0, h: 0, mutations: 0 });
     var ga = new GeneticAlgorithm(this.setData, this.onDone, this.onMutation);
     ga.start();
   };
