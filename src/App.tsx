@@ -1,8 +1,8 @@
 import React from "react";
 import "./App.css";
 import { withStyles, Theme, WithStyles } from "@material-ui/core/styles";
-import { Button } from "@material-ui/core";
-import { start } from "./Genetics";
+import { Button, Grid } from "@material-ui/core";
+import { GeneticAlgorithm } from "./GeneticAlgorithm";
 
 const styles = (theme: Theme) => ({
   root: {
@@ -14,6 +14,16 @@ const styles = (theme: Theme) => ({
     textAlign: "center" as "center",
     padding: theme.spacing(3),
   },
+
+  info: {
+    color: theme.palette.primary.main,
+  },
+
+  infoTable: {
+    "& td": {
+      padding: "5px",
+    },
+  },
 });
 
 interface Props extends WithStyles<typeof styles> {}
@@ -23,6 +33,7 @@ interface IState {
   n: number;
   chromos: number[];
   running: boolean;
+  mutations: number;
 }
 
 class App extends React.Component<Props, IState> {
@@ -33,23 +44,32 @@ class App extends React.Component<Props, IState> {
       n: 0,
       chromos: [6, 1, 3, 0, 7, 4, 2, 5],
       running: false,
+      mutations: 0,
     };
   }
-  componentDidMount() {}
 
-  setData = (h: number, n: number, chromos: number[]) => {
-    this.setState({ chromos: chromos, h: h, n: n, running: true });
+  setData = (h: number, chromos: number[]) => {
+    this.setState({ chromos: chromos, h: h, n: this.state.n + 1 });
+  };
+
+  onMutation = () => {
+    this.setState({ mutations: this.state.mutations + 1 });
   };
 
   onDone = () => {
     this.setState({ running: false });
   };
 
+  start = () => {
+    this.setState({ running: true, n: 0, mutations: 0 });
+    var ga = new GeneticAlgorithm(this.setData, this.onDone, this.onMutation);
+    ga.start();
+  };
+
   ChessBoard = (state: IState) => {
     var rows = [];
     console.log(state);
     for (var i = 7; i > -1; i--) {
-      var col = state.chromos.indexOf(i);
       if (i % 2 === 1) {
         rows.push(
           <tr>
@@ -132,14 +152,18 @@ class App extends React.Component<Props, IState> {
           <br />
           Given one queen in each column, the A.I. will move the queens to
           different squares until no queens are attacking each other.
+          <br />
+          The initial population is set to 100. The algorithm will generate up
+          to 500 new solutions before giving up. The mutation porbability is set
+          to 5%.
         </p>
-        {!this.state.h && (
+        {!this.state.running && (
           <div>
             <Button
               variant="contained"
               color="primary"
               style={{ marginRight: "1rem" }}
-              onClick={() => start(this.setData, this.onDone)}
+              onClick={this.start}
             >
               Start
             </Button>
@@ -152,9 +176,39 @@ class App extends React.Component<Props, IState> {
             </Button>
           </div>
         )}
-        <h3>Distance: {this.state.h}</h3>
-        <h3>Steps: {this.state.n}</h3>
-        <p>State: [{this.state.chromos.join(", ")}]</p>
+
+        <table className={classes.infoTable}>
+          <tr>
+            <td>
+              <h3>
+                Distance: <span className={classes.info}>{this.state.h}</span>
+              </h3>
+            </td>
+            <td>
+              <h3>
+                New Solutions Generated:
+                <span className={classes.info}> {this.state.n}</span>
+              </h3>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h3>
+                Mutations:
+                <span className={classes.info}> {this.state.mutations}</span>
+              </h3>
+            </td>
+            <td>
+              <h3>
+                State:{" "}
+                <span className={classes.info}>
+                  [{this.state.chromos.join(", ")}]
+                </span>
+              </h3>
+            </td>
+          </tr>
+        </table>
+
         <table className="chess-board">
           <tbody>
             <tr>
