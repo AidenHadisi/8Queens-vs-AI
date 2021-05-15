@@ -1,8 +1,9 @@
 import React from "react";
 import "./App.css";
 import { withStyles, Theme, WithStyles } from "@material-ui/core/styles";
-import { Button, Grid } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { GeneticAlgorithm } from "./GeneticAlgorithm";
+import Board from "./components/Board";
 
 const styles = (theme: Theme) => ({
   root: {
@@ -64,75 +65,6 @@ class App extends React.Component<Props, IState> {
     this.setState({ running: true, n: 0, h: 0, mutations: 0 });
     var ga = new GeneticAlgorithm(this.setData, this.onDone, this.onMutation);
     ga.start();
-  };
-
-  ChessBoard = (state: IState) => {
-    var rows = [];
-    console.log(state);
-    for (var i = 7; i > -1; i--) {
-      if (i % 2 === 1) {
-        rows.push(
-          <tr>
-            <th>{i + 1}</th>
-            <td className="light">
-              {state.chromos[0] === i ? <span>♛</span> : ""}{" "}
-            </td>
-            <td className="dark">
-              {state.chromos[1] === i ? <span>♛</span> : ""}
-            </td>
-            <td className="light">
-              {state.chromos[2] === i ? <span>♛</span> : ""}
-            </td>
-            <td className="dark">
-              {state.chromos[3] === i ? <span>♛</span> : ""}
-            </td>
-            <td className="light">
-              {state.chromos[4] === i ? <span>♛</span> : ""}
-            </td>
-            <td className="dark">
-              {state.chromos[5] === i ? <span>♛</span> : ""}
-            </td>
-            <td className="light">
-              {state.chromos[6] === i ? <span>♛</span> : ""}
-            </td>
-            <td className="dark">
-              {state.chromos[7] === i ? <span>♛</span> : ""}
-            </td>
-          </tr>
-        );
-      } else {
-        rows.push(
-          <tr>
-            <th>{i + 1}</th>
-            <td className="dark">
-              {state.chromos[0] === i ? <span>♛</span> : ""}{" "}
-            </td>
-            <td className="light">
-              {state.chromos[1] === i ? <span>♛</span> : ""}
-            </td>
-            <td className="dark">
-              {state.chromos[2] === i ? <span>♛</span> : ""}
-            </td>
-            <td className="light">
-              {state.chromos[3] === i ? <span>♛</span> : ""}
-            </td>
-            <td className="dark">
-              {state.chromos[4] === i ? <span>♛</span> : ""}
-            </td>
-            <td className="light">
-              {state.chromos[5] === i ? <span>♛</span> : ""}
-            </td>
-            <td className="dark">
-              {state.chromos[6] === i ? <span>♛</span> : ""}
-            </td>
-            <td className="light">
-              {state.chromos[7] === i ? <span>♛</span> : ""}
-            </td>
-          </tr>
-        );
-      }
-    }
-    return rows;
   };
 
   randomize = () => {
@@ -209,22 +141,7 @@ class App extends React.Component<Props, IState> {
           </tr>
         </table>
 
-        <table className="chess-board">
-          <tbody>
-            <tr>
-              <th></th>
-              <th>a</th>
-              <th>b</th>
-              <th>c</th>
-              <th>d</th>
-              <th>e</th>
-              <th>f</th>
-              <th>g</th>
-              <th>h</th>
-            </tr>
-            {this.ChessBoard(this.state)}
-          </tbody>
-        </table>
+        <Board chromosomes={this.state.chromos} />
       </div>
     );
   }

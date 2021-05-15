@@ -108,16 +108,18 @@ export class GeneticAlgorithm {
         children = [mom.chromosome, dad.chromosome];
       }
 
-      this.mutation(children);
       newPop.push(new Solution(children[0]));
       newPop.push(new Solution(children[1]));
     }
 
-    for (var i = 0; i < newPop.length; i++) {
-      this.callback(newPop[i].fitness, newPop[i].chromosome);
+    for (var child of newPop) {
+      this.mutate(child.chromosome);
+      this.callback(child.fitness, child.chromosome);
+
       await new Promise((r) => setTimeout(r, 100));
 
-      this._population.push(newPop[i]);
+      this._population.push(child);
+      if (child.fitness === 0) return;
     }
 
     this._population.sort(this.sortByFitness);
@@ -144,7 +146,7 @@ export class GeneticAlgorithm {
 
     //Find our crossover points
     var cxp1 = Math.floor((Math.random() * size) / 2);
-    var cxp2 = Math.floor(Math.random() * (size - cxp1)) + cxp1;
+    var cxp2 = Math.floor(Math.random() * (size - 2 - (cxp1 + 1))) + (cxp1 + 1);
 
     //Init our maps
     for (let i = 0; i < size; i++) {
@@ -178,19 +180,17 @@ export class GeneticAlgorithm {
     return [mom, dad];
   }
 
-  private mutation(children: number[][]) {
-    for (var child of children) {
-      if (Math.random() < this.mutationProbability) {
-        let x = Math.floor(Math.random() * this.queens);
-        let y = Math.floor(Math.random() * this.queens);
+  private mutate(chromosome: number[]) {
+    if (Math.random() < this.mutationProbability) {
+      let x = Math.floor(Math.random() * this.queens);
+      let y = Math.floor(Math.random() * this.queens);
 
-        //Switch genes at postion x and y
-        if (x != y) {
-          this.onMutation();
-          let temp = child[x];
-          child[x] = child[y];
-          child[y] = temp;
-        }
+      //Switch genes at postion x and y
+      if (x != y) {
+        this.onMutation();
+        let temp = chromosome[x];
+        chromosome[x] = chromosome[y];
+        chromosome[y] = temp;
       }
     }
   }
