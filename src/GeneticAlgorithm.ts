@@ -113,7 +113,8 @@ export class GeneticAlgorithm {
     }
 
     for (var child of newPop) {
-      this.mutate(child.chromosome);
+      this.mutate(child);
+
       this.callback(child.fitness, child.chromosome);
 
       await new Promise((r) => setTimeout(r, 100));
@@ -180,7 +181,7 @@ export class GeneticAlgorithm {
     return [mom, dad];
   }
 
-  private mutate(chromosome: number[]) {
+  private mutate(solution: Solution) {
     if (Math.random() < this.mutationProbability) {
       let x = Math.floor(Math.random() * this.queens);
       let y = Math.floor(Math.random() * this.queens);
@@ -188,9 +189,12 @@ export class GeneticAlgorithm {
       //Switch genes at postion x and y
       if (x != y) {
         this.onMutation();
-        let temp = chromosome[x];
-        chromosome[x] = chromosome[y];
-        chromosome[y] = temp;
+        let temp = solution.chromosome[x];
+        solution.chromosome[x] = solution.chromosome[y];
+        solution.chromosome[y] = temp;
+
+        //Must recalculate fitness value after mutation
+        solution.calcFitness();
       }
     }
   }
