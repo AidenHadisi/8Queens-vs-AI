@@ -78,6 +78,10 @@ class App extends React.Component<Props, IState> {
     return (
       <div className={classes.root}>
         <h1 style={{ padding: "5px 2rem" }}>8-Queens vs A.I.</h1>
+        <h3>
+          View on{" "}
+          <a href="https://github.com/AidenHadisi/8Queens-vs-AI">GitHub</a>
+        </h3>
         <p style={{ marginBottom: "1rem" }}>
           This application solves the 8-Queens problem using a{" "}
           <b>genetic algorithm</b>.

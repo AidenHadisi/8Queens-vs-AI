@@ -23,6 +23,9 @@ const theme = createMuiTheme({
           marginBottom: "1rem",
           display: "block",
         },
+        a: {
+          color: "#e84545",
+        },
       },
     },
   },
